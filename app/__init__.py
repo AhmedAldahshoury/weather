@@ -1,12 +1,7 @@
-import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
+from routes import weather_routes
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-
-db = SQLAlchemy(app)
-
+app.register_blueprint(weather_routes, url_prefix='/weather')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
