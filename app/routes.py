@@ -1,6 +1,6 @@
+from flasgger import swag_from
 from flask import Blueprint, jsonify
 
-weather_routes = Blueprint('weather_api', __name__)
 
 mock_data = {
     "Vienna": [
@@ -13,12 +13,14 @@ mock_data = {
     ]
 }
 
+weather_routes = Blueprint('weather', __name__)
 
 @weather_routes.route('/health_check', methods=['GET'])
 def health_check():
     return jsonify({"status": "OK"}), 200
 
 @weather_routes.route('/<city_name>', methods=['GET'])
+@swag_from('../docs/get_weather.yml')
 def get_weather(city_name: str):
     city_weather = mock_data.get(city_name)
     if not city_weather:
