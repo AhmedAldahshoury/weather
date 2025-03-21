@@ -20,9 +20,22 @@ def health_check():
     return jsonify({"status": "OK"}), 200
 
 @weather_routes.route('/<city_name>', methods=['GET'])
-@swag_from('../docs/get_weather.yml')
-def get_weather(city_name: str):
+@swag_from('../docs/get_city_weather.yml')
+def get_city_weather(city_name: str):
     city_weather = mock_data.get(city_name)
     if not city_weather:
-        return jsonify({"error": "City not found"}), 404
+        return jsonify({'error': f'City "{city_name}" is not found'}), 404
     return jsonify(city_weather), 200
+
+@weather_routes.route('/<city_name>/<date>', methods=['GET'])
+@swag_from('../docs/get_city_weather_by_date.yml')
+def get_city_weather_by_date(city_name: str, date: str):
+    city_weather = mock_data.get(city_name)
+    if not city_weather:
+        return jsonify({'error': f'City "{city_name}" is not found'}), 404
+
+    for weather_entry in city_weather:
+        if weather_entry['date'] == date:
+            return jsonify(weather_entry), 200
+
+    return jsonify({'error': f'No weather info was found for "{city_name}" on "{date}"'}), 404

@@ -1,0 +1,18 @@
+tags:
+  - Weather
+parameters:
+  - name: city_name
+    in: path
+    type: string
+    required: true
+    description: Name of the city to fetch weather data for
+  - name: date
+    in: path
+    type: string
+    required: true
+    description: Date of the weather data to fetch ('Format:' YYYY-MM-DD)
+responses:
+  200:
+    description: Weather data retrieved successfully
+  404:
+    description: City or Date not found
