@@ -26,8 +26,13 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_ENV=development
+ENV PYTHONPATH=/app
+
 # Expose the Flask application port
 EXPOSE 5000
 
-# Command to run the app
-CMD ["python", "app/main.py"]
+# Command to run migrations and the app
+CMD flask db init || true && flask db migrate -m "Initial migration" && flask db upgrade && flask run --host=0.0.0.0

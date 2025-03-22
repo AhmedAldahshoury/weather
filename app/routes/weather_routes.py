@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from flasgger import swag_from
 from flask import Blueprint, jsonify
+from ..models.models import Weather
 
 
 mock_data = {
@@ -18,6 +21,27 @@ weather_routes = Blueprint('weather', __name__)
 @weather_routes.route('/health_check', methods=['GET'])
 def health_check():
     return jsonify({"status": "OK"}), 200
+
+
+@weather_routes.route('/today', methods=['GET'])
+def get_all_weather_today():
+    try:
+        today_date = datetime.today().strftime('%Y-%m-%d')
+        weather_records = Weather.query.filter(Weather.date == today_date).all()
+        results = [
+                    {
+                        'id': record.id,
+                        'city': record.city_id,
+                        'temperature': record.temperature,
+                        'condition': record.condition,
+                        'humidity': record.humidity,
+                        'wind_speed': record.wind_speed,
+                    }
+                    for record in weather_records
+                ]
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @weather_routes.route('/<city_name>', methods=['GET'])
 @swag_from('../docs/get_city_weather.yml')
