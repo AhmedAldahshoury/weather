@@ -53,40 +53,38 @@ def get_all_cities():
                } for city in cities]
     return jsonify({'cities': result})
 
-@city_bp.route('/<string:city_name>', methods=['GET'])
-@swag_from('../docs/city_swagger/get_city_by_name.yml')
-def get_city_by_name(city_name):
-    city = City.query.filter_by(name=city_name).first()
-    if not city:
-        return jsonify({'error': f'City {city_name} is not found.'}), 404
-
-    result = {'id': city.id,
-              'name': city.name,
-              'latitude': city.latitude,
-              'longitude': city.longitude,
-              'country': city.country}
-    return jsonify(result)
-
 @city_bp.route('/', methods=['GET'])
-@swag_from('../docs/city_swagger/get_city_by_coordinates.yml')
-def get_city_by_coordinates():
-    try:
-        city_latitude = float(request.args.get('latitude'))
-        city_longitude = float(request.args.get('longitude'))
-    except (TypeError, ValueError):
-        return jsonify({'error': 'Invalid or missing latitude and longitude query parameters.'}), 400
+@swag_from('../docs/city_swagger/get_city.yml')
+def get_city():
+    city_name = request.args.get('name')
+    latitude = request.args.get('latitude')
+    longitude = request.args.get('longitude')
 
-    city = City.query.filter_by(latitude=city_latitude, longitude=city_longitude).first()
-    if not city:
-        return jsonify({'error': f'City with coordinates {city_latitude, city_longitude} is not found.'}), 404
+    if city_name:
+        city = City.query.filter_by(name=city_name).first()
+        if not city:
+            return jsonify({'error': f'City {city_name} not found.'}), 404
+    elif latitude and longitude:
+        try:
+            latitude = float(latitude)
+            longitude = float(longitude)
+        except ValueError:
+            return jsonify({'error': 'Invalid latitude or longitude values.'}), 400
 
-    result = {'id': city.id,
-              'name': city.name,
-              'latitude': city.latitude,
-              'longitude': city.longitude,
-              'country': city.country}
+        city = City.query.filter_by(latitude=latitude, longitude=longitude).first()
+        if not city:
+            return jsonify({'error': f'City with coordinates ({latitude}, {longitude}) not found.'}), 404
+    else:
+        return jsonify({'error': 'Missing query parameters. Provide either city name or latitude and longitude.'}), 400
+
+    result = {
+        'id': city.id,
+        'name': city.name,
+        'latitude': city.latitude,
+        'longitude': city.longitude,
+        'country': city.country
+    }
     return jsonify(result)
-
 
 @city_bp.route('/<int:city_id>', methods=['PUT'])
 @swag_from('../docs/city_swagger/update_city.yml')

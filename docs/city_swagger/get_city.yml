@@ -1,0 +1,55 @@
+tags:
+  - City
+summary: Get city details by name or coordinates
+description: |
+  Retrieve detailed information about a city either by specifying its name or geographic coordinates.
+parameters:
+  - name: name
+    in: query
+    type: string
+    required: false
+    description: Name of the city to retrieve information for.
+  - name: latitude
+    in: query
+    type: number
+    format: float
+    required: false
+    description: Latitude coordinate of the city.
+  - name: longitude
+    in: query
+    type: number
+    format: float
+    required: false
+    description: Longitude coordinate of the city.
+responses:
+  200:
+    description: Successful retrieval of city information
+    schema:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        country:
+          type: string
+  400:
+    description: Bad request due to missing or invalid parameters
+    schema:
+      type: object
+      properties:
+        error:
+          type: string
+  404:
+    description: City not found
+    schema:
+      type: object
+      properties:
+        error:
+          type: string

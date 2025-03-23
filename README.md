@@ -8,6 +8,7 @@ This project provides a RESTful API for retrieving weather forecasts and managin
 - **Weather Forecast Retrieval**: Fetch weather forecasts for the cities.
 - **Automated Forecast Updates**: Scheduled tasks to update forecasts periodically.
 - **Interactive API Documentation**: Swagger UI integration for easy API exploration.
+- **Basic UI**: User Interface for basic information visualization.
 
 ## Technology Stack
 
@@ -16,7 +17,6 @@ This project provides a RESTful API for retrieving weather forecasts and managin
 - **Containerization**: Docker & Docker Compose
 - **Scheduling**: APScheduler
 - **API Documentation**: Flasgger (Swagger UI)
-- **Continuous Integration/Continuous Deployment (CI/CD)**: GitHub Actions
 
 ## Getting Started
 
@@ -58,7 +58,7 @@ This project provides a RESTful API for retrieving weather forecasts and managin
 
 
 5. **Access the Application**:
-
+   - **Basic UI**: `http://localhost:3000`
    - **API Endpoints**: `http://localhost:5000`
    - **Swagger UI**: `http://localhost:5000/apidocs`
 
@@ -74,9 +74,9 @@ The application uses APScheduler to automatically update weather forecasts every
 
 ## Future Work and Improvements
 
-- **User Interface (UI)**: Develop a responsive and user-friendly frontend using frameworks such as React or Vue.
+- **User Interface (UI)**: Update the UI to include more features.
 - **Enhanced CI/CD**: Implement automated deployment workflows, including deployment to cloud services like AWS or Azure.
-- **Comprehensive Testing**: Expand test coverage to include integration and end-to-end testing to further ensure application reliability.
+- **Comprehensive Testing**: Generate tests to include integration and end-to-end testing to further ensure application reliability.
 
 ## Contributing
 
