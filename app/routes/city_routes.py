@@ -10,9 +10,9 @@ city_bp = Blueprint('city', __name__)
 @city_bp.route('/', methods=['POST'])
 @swag_from('../docs/city_swagger/create_city.yml')
 def create_city():
-    data = request.json
-    city_name = data.get('name')
-    country_name = data.get('country')
+    city_name = request.args.get('name')
+    country_name = request.args.get('country')
+
     if not city_name:
         return jsonify({'error': 'City name is required.'}), 400
 
@@ -35,6 +35,7 @@ def create_city():
     return jsonify({'message': f'City {city_name} created successfully!',
                     'city': {'id': new_city.id,
                              'name': new_city.name,
+                             'country': new_city.country,
                              'latitude': new_city.latitude,
                              'longitude': new_city.longitude}
                     }), 201
