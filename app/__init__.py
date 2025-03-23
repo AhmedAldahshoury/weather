@@ -31,7 +31,9 @@ def create_app():
     migrate.init_app(app, db)
 
     # Register Blueprints
-    from app.routes.weather_routes import weather_routes
-    app.register_blueprint(weather_routes, url_prefix='/weather')
+    from app.routes.weather_routes import weather_bp
+    from app.routes.city_routes import city_bp
+    app.register_blueprint(weather_bp, url_prefix='/weather')
+    app.register_blueprint(city_bp, url_prefix='/city')
 
     return app
