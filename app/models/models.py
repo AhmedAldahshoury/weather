@@ -5,6 +5,8 @@ class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     country = db.Column(db.String(50), unique=False, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
 
 class Weather(db.Model):
     __tablename__ = 'weather'
