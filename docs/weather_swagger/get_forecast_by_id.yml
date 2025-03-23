@@ -1,0 +1,34 @@
+tags:
+  - Weather
+summary: Get a weather forecast by ID
+parameters:
+  - name: forecast_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The ID of the forecast to retrieve
+responses:
+  200:
+    description: Forecast retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            city_name:
+              type: string
+            date:
+              type: string
+            temperature:
+              type: number
+            humidity:
+              type: number
+            condition:
+              type: string
+            wind_speed:
+              type: number
+  404:
+    description: Forecast not found

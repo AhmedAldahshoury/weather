@@ -1,0 +1,64 @@
+tags:
+  - Weather
+summary: Create a new weather forecast
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          city_name:
+            type: string
+            example: Vienna
+          date:
+            type: string
+            format: date
+            example: 2025-03-23
+          temperature:
+            type: number
+            example: 15.5
+          humidity:
+            type: number
+            example: 75.0
+          condition:
+            type: string
+            example: Cloudy
+          wind_speed:
+            type: number
+            example: 10.0
+        required:
+          - city_name
+          - date
+          - temperature
+          - humidity
+          - condition
+          - wind_speed
+responses:
+  201:
+    description: Forecast created successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            forecast:
+              type: object
+              properties:
+                id:
+                  type: integer
+                city_name:
+                  type: string
+                date:
+                  type: string
+                temperature:
+                  type: number
+                humidity:
+                  type: number
+                condition:
+                  type: string
+                wind_speed:
+                  type: number
+  404:
+    description: City not found

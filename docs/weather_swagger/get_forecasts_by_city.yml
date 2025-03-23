@@ -1,0 +1,39 @@
+tags:
+  - Weather
+summary: Get forecasts by city name
+parameters:
+  - name: city_name
+    in: path
+    required: true
+    schema:
+      type: string
+    description: The name of the city to retrieve forecasts for
+responses:
+  200:
+    description: List of forecasts retrieved successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            forecasts:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  city_name:
+                    type: string
+                  date:
+                    type: string
+                  temperature:
+                    type: number
+                  humidity:
+                    type: number
+                  condition:
+                    type: string
+                  wind_speed:
+                    type: number
+  404:
+    description: City not found

@@ -1,0 +1,57 @@
+tags:
+  - Weather
+summary: Update an existing weather forecast
+parameters:
+  - name: forecast_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The ID of the forecast to update
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          temperature:
+            type: number
+            example: 20.0
+          humidity:
+            type: number
+            example: 60.0
+          condition:
+            type: string
+            example: Sunny
+          wind_speed:
+            type: number
+            example: 12.0
+responses:
+  200:
+    description: Forecast updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            forecast:
+              type: object
+              properties:
+                id:
+                  type: integer
+                city_name:
+                  type: string
+                date:
+                  type: string
+                temperature:
+                  type: number
+                humidity:
+                  type: number
+                condition:
+                  type: string
+                wind_speed:
+                  type: number
+  404:
+    description: Forecast not found

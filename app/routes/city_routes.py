@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flasgger import swag_from
 
 from app import db
 from app.models.models import City
@@ -6,6 +7,7 @@ from app.models.models import City
 city_bp = Blueprint('city', __name__)
 
 @city_bp.route('/', methods=['POST'])
+@swag_from('../docs/city_swagger/create_city.yml')
 def create_city():
     data = request.json
     city_name = data.get('name')
@@ -29,12 +31,14 @@ def create_city():
                     }), 201
 
 @city_bp.route('/', methods=['GET'])
+@swag_from('../docs/city_swagger/get_all_cities.yml')
 def get_all_cities():
     cities = City.query.all()
     result = [{'id': city.id, 'name': city.name, 'country': city.country} for city in cities]
     return jsonify({'cities': result})
 
 @city_bp.route('/<string:city_name>', methods=['GET'])
+@swag_from('../docs/city_swagger/get_city_by_name.yml')
 def get_city_by_name(city_name):
     city = City.query.filter_by(name=city_name).first()
     if not city:
@@ -44,6 +48,7 @@ def get_city_by_name(city_name):
     return jsonify(result)
 
 @city_bp.route('/<int:city_id>', methods=['PUT'])
+@swag_from('../docs/city_swagger/update_city.yml')
 def update_city(city_id):
     data = request.json
     city = City.query.get_or_404(city_id)
@@ -58,6 +63,7 @@ def update_city(city_id):
     return jsonify({'message': 'City updated successfully!', 'city': {'id': city.id, 'name': city.name}})
 
 @city_bp.route('/<int:city_id>', methods=['DELETE'])
+@swag_from('../docs/city_swagger/delete_city.yml')
 def delete_city(city_id):
     city = City.query.get_or_404(city_id)
     db.session.delete(city)

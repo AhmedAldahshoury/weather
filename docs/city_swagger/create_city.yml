@@ -1,0 +1,39 @@
+tags:
+  - City
+summary: Create a new city
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: Vienna
+          country:
+            type: string
+            example: Austria
+        required:
+          - name
+          - country
+responses:
+  201:
+    description: City created successfully!
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            city:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                country:
+                  type: string
+  400:
+    description: Bad request (City name or country is missing, or city already exists)

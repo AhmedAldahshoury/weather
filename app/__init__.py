@@ -29,6 +29,7 @@ def create_app():
     # Initialize Extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    swagger = Swagger(app)
 
     # Register Blueprints
     from app.routes.weather_routes import weather_bp

@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, jsonify, request
-
+from flasgger import swag_from
 from ..models.models import Weather, City
 from app import db
 
@@ -8,6 +8,7 @@ weather_bp = Blueprint('weather', __name__)
 
 
 @weather_bp.route('/forecast', methods=['POST'])
+@swag_from('../docs/weather_swagger/create_forecast.yml')
 def create_forecast():
     data = request.json
     city_name = data.get('city_name')
@@ -39,6 +40,7 @@ def create_forecast():
 
 
 @weather_bp.route('/forecast', methods=['GET'])
+@swag_from('../docs/weather_swagger/get_all_forecasts.yml')
 def get_all_forecasts():
     forecasts = Weather.query.all()
     result = [
@@ -56,6 +58,7 @@ def get_all_forecasts():
 
 
 @weather_bp.route('/forecast/<int:forecast_id>', methods=['GET'])
+@swag_from('../docs/weather_swagger/get_forecast_by_id.yml')
 def get_forecast_by_id(forecast_id):
     forecast = Weather.query.get_or_404(forecast_id)
     result = {
@@ -71,6 +74,7 @@ def get_forecast_by_id(forecast_id):
 
 
 @weather_bp.route('/forecast/city/<string:city_name>', methods=['GET'])
+@swag_from('../docs/weather_swagger/get_forecasts_by_city.yml')
 def get_forecasts_by_city(city_name):
     city = City.query.filter_by(name=city_name).first()
     if not city:
@@ -92,6 +96,7 @@ def get_forecasts_by_city(city_name):
 
 
 @weather_bp.route('/forecast/<int:forecast_id>', methods=['PUT'])
+@swag_from('../docs/weather_swagger/update_forecast.yml')
 def update_forecast(forecast_id):
     data = request.json
     forecast = Weather.query.get_or_404(forecast_id)
@@ -106,6 +111,7 @@ def update_forecast(forecast_id):
 
 
 @weather_bp.route('/forecast/<int:forecast_id>', methods=['DELETE'])
+@swag_from('../docs/weather_swagger/delete_forecast.yml')
 def delete_forecast(forecast_id):
     forecast = Weather.query.get_or_404(forecast_id)
     db.session.delete(forecast)
