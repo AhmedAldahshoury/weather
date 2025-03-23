@@ -35,4 +35,4 @@ ENV PYTHONPATH=/app
 EXPOSE 5000
 
 # Command to run migrations and the app
-CMD flask db init || true && flask db migrate -m "Initial migration" && flask db upgrade && flask run --host=0.0.0.0
+CMD flask db init || true && flask db migrate -m "Initial migration" && flask db upgrade && flask populate-db && flask run --host=0.0.0.0

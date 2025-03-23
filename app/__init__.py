@@ -34,7 +34,9 @@ def create_app():
     # Register Blueprints
     from app.routes.weather_routes import weather_bp
     from app.routes.city_routes import city_bp
-    app.register_blueprint(weather_bp, url_prefix='/weather')
+    from app.commands import register_commands
+    register_commands(app)
+    app.register_blueprint(weather_bp, url_prefix='/forecast')
     app.register_blueprint(city_bp, url_prefix='/city')
 
     return app
