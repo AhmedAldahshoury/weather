@@ -26,6 +26,10 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+# Copy the wait script into the container
+COPY wait-for-sql.sh /wait-for-sql.sh
+RUN chmod +x /wait-for-sql.sh
+
 # Set environment variables
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=development
@@ -35,4 +39,9 @@ ENV PYTHONPATH=/app
 EXPOSE 5000
 
 # Command to run migrations and the app
-CMD flask db init || true && flask db migrate -m "Initial migration" && flask db upgrade && flask populate-db && flask run --host=0.0.0.0
+CMD /wait-for-sql.sh mssql_container 1433 sh -c "\
+  flask db init || true && \
+  flask db migrate -m 'Initial migration' && \
+  flask db upgrade && \
+  flask populate-db && \
+  flask run --host=0.0.0.0"

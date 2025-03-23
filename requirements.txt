@@ -6,4 +6,5 @@ pyodbc==5.2.0
 python-dotenv==1.0.1
 requests==2.32.3
 Flask-APScheduler==1.13.1
-click~=8.1.8
+click==8.1.8
+Flask-Cors==3.0.10
