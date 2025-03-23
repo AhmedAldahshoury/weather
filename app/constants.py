@@ -4,3 +4,4 @@ CITIES_LIST = [{'name': 'Vienna', 'country': 'Austria'},
                {'name': 'Prague', 'country': 'Czech Republic'},
                {'name': 'Cairo', 'country': 'Egypt'}
                ]
+FORECAST_UPDATE_INTERVAL = 3 # in hours

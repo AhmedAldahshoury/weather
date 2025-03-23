@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flasgger import Swagger
@@ -7,6 +8,7 @@ from dotenv import load_dotenv
 
 db = SQLAlchemy()
 migrate = Migrate()
+scheduler = APScheduler()
 
 
 def create_app():
@@ -38,5 +40,6 @@ def create_app():
     register_commands(app)
     app.register_blueprint(weather_bp, url_prefix='/forecast')
     app.register_blueprint(city_bp, url_prefix='/city')
-
+    scheduler.init_app(app)
+    scheduler.start()
     return app

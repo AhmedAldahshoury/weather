@@ -5,8 +5,8 @@ from typing import Optional
 import click
 import requests
 
-from app import db
-from app.constants import GEO_URL, FORECAST_URL
+from app import db, scheduler
+from app.constants import GEO_URL, FORECAST_URL, FORECAST_UPDATE_INTERVAL
 from app.models.models import Forecast, City
 
 API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
@@ -40,7 +40,7 @@ def get_city_coordinates(city_name: str)-> Optional[tuple[float, float]]:
         return None
 
 
-def populate_forecasts():
+def populate_db_with_forecasts():
     cities = City.query.all()
 
     if not cities:
@@ -130,3 +130,11 @@ def populate_db_with_cities(cities_list: list[dict[str,str]]):
         except Exception as e:
             db.session.rollback()
             click.echo(e)
+
+
+@scheduler.task('interval', id='update_forecasts_periodically', hours=FORECAST_UPDATE_INTERVAL)
+def update_forecasts_periodically():
+    with scheduler.app.app_context():
+        populate_db_with_forecasts()
+    current_time_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    click.echo(f'{current_time_str} - Scheduler succeeded, Database is updated successfully')
