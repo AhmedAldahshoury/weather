@@ -9,10 +9,9 @@ shift 2
 
 echo "Waiting for SQL Server at $HOST:$PORT..."
 
-# Loop until the connection to the specified host and port is successful.
-while ! nc -z "$HOST" "$PORT"; do
+while ! nc -z "$HOST" "$PORT" && ! timeout 1 bash -c "echo > /dev/tcp/$HOST/$PORT"; do
   echo "SQL Server not available yet. Waiting..."
-  sleep 2
+  sleep 15
 done
 
 echo "SQL Server is up - executing command."

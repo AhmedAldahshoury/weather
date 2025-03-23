@@ -7,11 +7,18 @@ import { Card } from 'baseui/card';
 import { ParagraphMedium } from 'baseui/typography';
 
 function App() {
+  // Existing states for forecast search
   const [cityName, setCityName] = useState('');
   const [forecastData, setForecastData] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // New states for adding a city
+  const [cityNameToAdd, setCityNameToAdd] = useState('');
+  const [countryToAdd, setCountryToAdd] = useState('');
+  const [addCityMessage, setAddCityMessage] = useState('');
+
+  // Handle forecast search
   const handleSearch = async () => {
     if (!cityName) return;
     setLoading(true);
@@ -32,19 +39,47 @@ function App() {
     setLoading(false);
   };
 
+  // Handle adding a new city
+  const handleAddCity = async () => {
+    if (!cityNameToAdd || !countryToAdd) return;
+    setAddCityMessage(''); // clear any old messages
+
+    try {
+      const response = await fetch('http://localhost:5000/city', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: cityNameToAdd, country: countryToAdd }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setAddCityMessage(data.message || 'City added successfully!');
+        // Clear inputs
+        setCityNameToAdd('');
+        setCountryToAdd('');
+      } else {
+        setAddCityMessage(data.error || 'Error adding city.');
+      }
+    } catch (error) {
+      setAddCityMessage('Error adding city.');
+    }
+  };
+
   return (
     <Block backgroundColor="#f0f4f8" minHeight="100vh" padding="scale800">
-      {/* Header */}
+      {/* Header / Forecast Search */}
       <Block display="flex" flexDirection="column" alignItems="center" marginBottom="scale800">
         <HeadingLevel>
           <Heading styleLevel={1}>Weather Forecast</Heading>
         </HeadingLevel>
+
+        {/* Search for forecast */}
         <Block marginTop="scale600" width={['100%', '80%', '60%']}>
-          {/* Remove or set clearable={false} to avoid the “X” icon */}
           <Input
             value={cityName}
-            placeholder="Enter a city name"
+            placeholder="Enter a city name to get the forecast"
             onChange={(e) => setCityName(e.target.value)}
+            // No 'clearable' to avoid the "X" icon
           />
         </Block>
         <Block marginTop="scale400">
@@ -83,6 +118,38 @@ function App() {
           )}
         </Block>
       )}
+
+      {/* Add New City Section */}
+      <Block marginTop="scale800">
+        <HeadingLevel>
+          <Heading styleLevel={3}>Add a New City</Heading>
+        </HeadingLevel>
+        <Block
+          marginTop="scale600"
+          width={['100%', '80%', '60%']}
+          display="flex"
+          flexDirection="column"
+          gridGap="scale400"
+        >
+          <Input
+            value={cityNameToAdd}
+            placeholder="City Name"
+            onChange={(e) => setCityNameToAdd(e.target.value)}
+          />
+          <Input
+            value={countryToAdd}
+            placeholder="Country"
+            onChange={(e) => setCountryToAdd(e.target.value)}
+          />
+          <Button onClick={handleAddCity}>Add City</Button>
+
+          {addCityMessage && (
+            <Block color="primary" marginTop="scale400">
+              {addCityMessage}
+            </Block>
+          )}
+        </Block>
+      </Block>
     </Block>
   );
 }

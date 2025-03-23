@@ -3,7 +3,7 @@ from flasgger import swag_from
 
 from app import db
 from app.models.models import City
-from app.utils import get_city_coordinates
+from app.utils import get_city_coordinates, populate_db_with_forecasts
 
 city_bp = Blueprint('city', __name__)
 
@@ -31,6 +31,7 @@ def create_city():
     new_city = City(name=city_name, country=country_name, latitude=latitude, longitude=longitude)
     db.session.add(new_city)
     db.session.commit()
+    populate_db_with_forecasts()
 
     return jsonify({'message': f'City {city_name} created successfully!',
                     'city': {'id': new_city.id,
