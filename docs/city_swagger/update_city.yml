@@ -1,0 +1,45 @@
+tags:
+  - City
+summary: Update an existing city
+parameters:
+  - name: city_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The ID of the city to update
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: New City Name
+          country:
+            type: string
+            example: New Country
+responses:
+  200:
+    description: City updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+            city:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                country:
+                  type: string
+  400:
+    description: City name already exists
+  404:
+    description: City not found

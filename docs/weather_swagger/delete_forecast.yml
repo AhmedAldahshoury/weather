@@ -1,0 +1,22 @@
+tags:
+  - Weather
+summary: Delete a weather forecast by ID
+parameters:
+  - name: forecast_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The ID of the forecast to delete
+responses:
+  200:
+    description: Forecast deleted successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+  404:
+    description: Forecast not found

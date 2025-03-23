@@ -1,0 +1,30 @@
+tags:
+  - Weather
+summary: Get all weather forecasts
+responses:
+  200:
+    description: A list of all weather forecasts
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            forecasts:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  city_name:
+                    type: string
+                  date:
+                    type: string
+                  temperature:
+                    type: number
+                  humidity:
+                    type: number
+                  condition:
+                    type: string
+                  wind_speed:
+                    type: number

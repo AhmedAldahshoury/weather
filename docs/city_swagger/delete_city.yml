@@ -1,0 +1,22 @@
+tags:
+  - City
+summary: Delete a city by ID
+parameters:
+  - name: city_id
+    in: path
+    required: true
+    schema:
+      type: integer
+    description: The ID of the city to delete
+responses:
+  200:
+    description: City deleted successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+  404:
+    description: City not found
