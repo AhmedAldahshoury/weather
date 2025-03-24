@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask import Blueprint, jsonify, request
 from flasgger import swag_from
+
+from ..constants import DATE_FORMAT
 from ..models.models import Forecast, City
 from app import db
 
@@ -11,20 +13,23 @@ weather_bp = Blueprint('weather', __name__)
 @swag_from('../docs/weather_swagger/create_forecast.yml')
 def create_forecast():
     data = request.json
+    if not data:
+        return jsonify({'error': 'Request body must be JSON.'}), 400
+
+    required_fields = ['city_name', 'date', 'temperature', 'humidity', 'condition', 'wind_speed']
+    missing_fields = [field for field in required_fields if field not in data]
+    if missing_fields:
+        return jsonify({'error': f'Missing fields: {", ".join(missing_fields)}'}), 400
+
     city_name = data.get('city_name')
-
-    if not city_name:
-        return jsonify({'error': 'City name is required.'}), 400
-
     city = City.query.filter_by(name=city_name).first()
-
     if not city:
         return jsonify({'error': f'City {city_name} not found. Please create the city first.'}), 404
 
     try:
         new_forecast = Forecast(
             city_id=city.id,
-            date=datetime.strptime(data['date'], '%Y-%m-%d').date(),
+            date=datetime.strptime(data['date'], DATE_FORMAT).date(),
             temperature=float(data['temperature']),
             humidity=float(data['humidity']),
             condition=data['condition'],
@@ -47,7 +52,7 @@ def get_all_forecasts():
         {
             'id': forecast.id,
             'city_id': forecast.city_id,
-            'date': forecast.date.strftime('%Y-%m-%d'),
+            'date': forecast.date.strftime(DATE_FORMAT),
             'temperature': forecast.temperature,
             'humidity': forecast.humidity,
             'condition': forecast.condition,
@@ -64,7 +69,7 @@ def get_forecast_by_id(forecast_id):
     result = {
         'id': forecast.id,
         'city_id': forecast.city_id,
-        'date': forecast.date.strftime('%Y-%m-%d'),
+        'date': forecast.date.strftime(DATE_FORMAT),
         'temperature': forecast.temperature,
         'humidity': forecast.humidity,
         'condition': forecast.condition,
@@ -85,7 +90,7 @@ def get_forecasts_by_city(city_name):
         {
             'id': forecast.id,
             'city_id': forecast.city_id,
-            'date': forecast.date.strftime('%Y-%m-%d'),
+            'date': forecast.date.strftime(DATE_FORMAT),
             'temperature': forecast.temperature,
             'humidity': forecast.humidity,
             'condition': forecast.condition,

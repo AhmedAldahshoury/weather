@@ -5,3 +5,4 @@ CITIES_LIST = [{'name': 'Vienna', 'country': 'Austria'},
                {'name': 'Cairo', 'country': 'Egypt'}
                ]
 FORECAST_UPDATE_INTERVAL = 3 # in hours
+DATE_FORMAT = '%Y-%m-%d'
