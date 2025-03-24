@@ -1,0 +1,83 @@
+tags:
+  - City
+summary: Retrieve cities or a specific city by name
+description: >
+  Returns all cities if no query parameter is provided. If a query parameter `name` is provided,
+  returns the city that matches the name.
+parameters:
+  - in: query
+    name: name
+    required: false
+    schema:
+      type: string
+    description: The name of the city to retrieve. If omitted, all cities are returned.
+responses:
+  '200':
+    description: Successful retrieval of city information.
+    content:
+      application/json:
+        schema:
+          oneOf:
+            - type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: Vienna
+                country:
+                  type: string
+                  example: Austria
+                latitude:
+                  type: number
+                  format: float
+                  example: 48.2082
+                longitude:
+                  type: number
+                  format: float
+                  example: 16.3738
+            - type: object
+              properties:
+                cities:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: Vienna
+                      country:
+                        type: string
+                        example: Austria
+                      latitude:
+                        type: number
+                        format: float
+                        example: 48.2082
+                      longitude:
+                        type: number
+                        format: float
+                        example: 16.3738
+  '400':
+    description: Bad Request – invalid or missing query parameters.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "Invalid query parameters provided."
+  '404':
+    description: City not found.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "City Vienna not found."

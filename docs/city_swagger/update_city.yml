@@ -1,14 +1,18 @@
 tags:
   - City
 summary: Update an existing city
+description: >
+  Update an existing city's details. Provide optional fields to update the city's name, country, and coordinates.
+  If the city name is updated and no coordinates are provided, new coordinates will be auto-fetched.
 parameters:
   - name: city_id
     in: path
     required: true
     schema:
       type: integer
-    description: The ID of the city to update
+    description: The ID of the city to update.
 requestBody:
+  required: true
   content:
     application/json:
       schema:
@@ -20,9 +24,19 @@ requestBody:
           country:
             type: string
             example: New Country
+          latitude:
+            type: number
+            format: float
+            example: 48.2082
+          longitude:
+            type: number
+            format: float
+            example: 16.3738
+        description: >
+          Optional fields to update. If only one of latitude or longitude is provided, both must be provided.
 responses:
-  200:
-    description: City updated successfully
+  '200':
+    description: City updated successfully.
     content:
       application/json:
         schema:
@@ -30,16 +44,38 @@ responses:
           properties:
             message:
               type: string
+              example: City updated successfully!
             city:
               type: object
               properties:
                 id:
                   type: integer
+                  example: 1
                 name:
                   type: string
+                  example: New City Name
                 country:
                   type: string
-  400:
-    description: City name already exists
-  404:
-    description: City not found
+                  example: New Country
+                latitude:
+                  type: number
+                  format: float
+                  example: 48.2082
+                longitude:
+                  type: number
+                  format: float
+                  example: 16.3738
+  '400':
+    description: >
+      Bad request – possible reasons include city name already exists, incomplete coordinate data,
+      or invalid latitude/longitude values.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: City name already exists.
+  '404':
+    description: City not found.

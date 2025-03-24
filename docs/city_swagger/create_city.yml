@@ -1,19 +1,22 @@
 tags:
   - City
 summary: Create a new city
-parameters:
-  - in: query
-    name: name
-    required: true
-    schema:
-      type: string
-    example: Vienna
-  - in: query
-    name: country
-    required: true
-    schema:
-      type: string
-    example: Austria
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - country
+        properties:
+          name:
+            type: string
+            example: Vienna
+          country:
+            type: string
+            example: Austria
 responses:
   201:
     description: City created successfully!
@@ -24,18 +27,34 @@ responses:
           properties:
             message:
               type: string
+              example: "City Vienna created successfully!"
             city:
               type: object
               properties:
                 id:
                   type: integer
+                  example: 1
                 name:
                   type: string
+                  example: Vienna
                 country:
                   type: string
+                  example: Austria
                 latitude:
                   type: number
+                  format: float
+                  example: 48.2082
                 longitude:
                   type: number
+                  format: float
+                  example: 16.3738
   400:
-    description: Bad request (City name or country is missing, or city already exists)
+    description: Bad request (e.g., missing city name or country, duplicate city, or invalid city name)
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            error:
+              type: string
+              example: "City name is required."
